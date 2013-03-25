@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %} {{ block.super }} | Sweeps{% endblock title %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{{ STATIC_URL }}vodkamartinisweeps/css/main.css"/>
+{% endblock css %}
+
+{% block bodyclass %}sweeps{% endblock bodyclass %}
+
+{% block sidebar %}
+{% endblock sidebar %}
+
+{% block footer_javascript_section %}
+{% endblock footer_javascript_section %}

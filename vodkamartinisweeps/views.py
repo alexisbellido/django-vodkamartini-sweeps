@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, render_to_response, get_object_or_404
 
 def sweeps_index(request, page=1):
     """
@@ -8,4 +8,9 @@ def sweeps_index(request, page=1):
     """
 
     # do something
-    pass
+    return render(request, 
+                  'vodkamartinisweeps/sweeps_list.html',
+                  {
+                    'var': 'this is a variable',
+                  },
+                  )

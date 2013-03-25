@@ -1,0 +1,58 @@
+@import "variables";
+@import "mixins";
+@import "compass/css3/border-radius";
+
+.quiz #content {
+    padding: $padding_default;
+}
+
+.quiz-home,
+.quiz-detail {
+    h1 {
+        font-size: $font_size_super_big;
+        color: $color_primary;
+        font-family: $font_family_heading;
+        margin-bottom: $margin_vertical;
+    }
+
+}
+
+.quiz-home {
+    #box {
+        padding: $padding_default;
+        p {
+            border: 1px solid $color_fg_1;
+            @include border-radius(5px);
+            font-size: $font_size_big;
+            padding: $padding_default;
+        }
+        div {
+            background-color: $color_main_bg;
+            border: 1px solid darken($color_main_bg, 20%);
+            padding: $padding_default;
+            @include rounded_borders(10px);
+        }
+    }
+
+    #box a {
+        color: blue;
+        &:hover {
+            color: green;
+        }
+    }
+}
+
+// Smartphones (portrait and landscape)
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    @include hide_for_mobile;
+}
+
+// Galaxy S3 portrait
+@media only screen and (max-device-width: 720px) and (orientation:portrait) {
+    @include hide_for_mobile;
+}
+
+// Galaxy S3 landscape
+@media only screen and (max-device-width: 1280px) and (orientation:landscape) {
+    @include hide_for_mobile;
+}

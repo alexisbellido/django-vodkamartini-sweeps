@@ -5,8 +5,7 @@ from .models import Sweep, SweepEntry
 class SweepEntryForm(forms.Form):
 
     #def __init__(self, author, quiz_id=0, request=None, *args, **kwargs):
-    #    super(QuizForm, self).__init__(*args, **kwargs)
-    #    self.author = author
+    #    super(SweepEntryForm, self).__init__(*args, **kwargs)
     #    self.quiz_id = quiz_id
     #    self.request = request
 

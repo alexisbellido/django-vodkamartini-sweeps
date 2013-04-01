@@ -19,27 +19,14 @@
     <h1>The sweeps title: {{ sweep.title }}</h1>
 </article>
 
-<form action="{% url 'vodkamartinisweeps_sweepentry_detail' slug=sweep_slug %}" method="post">
+<form action="{% url 'vodkamartinisweeps_sweepentry_detail' slug=sweep.slug %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" name="next_question" value="Submit" />
+    <input type="submit" name="submit" value="Submit" />
 </form>
 
+{% comment %}
 <p>This sweep URL: {% url 'vodkamartinisweeps_sweepentry_detail' slug=sweep_slug %}</p>
-
-    {% comment %}
-<p>This quiz URL: <a href="{{ object.quiz.get_absolute_url }}">{{ object.quiz.get_absolute_url }}</a></p>
-
-
-{% if previous_question_id %}
-    <p>Previous question URL: <a href="{% url 'vodkamartiniquiz_question_detail' slug=quiz_slug pk=previous_question_id %}">{% url 'vodkamartiniquiz_question_detail' slug=quiz_slug pk=previous_question_id %}</a></p>
-{% endif %}
-
-{% if next_question_id %}
-    <p>Next question URL: <a href="{% url 'vodkamartiniquiz_question_detail' slug=quiz_slug pk=next_question_id %}">{% url 'vodkamartiniquiz_question_detail' slug=quiz_slug pk=next_question_id %}</a></p>
-{% endif %}
-
-<p><a href="{% url 'vodkamartiniquiz_quiz_home' %}">back to quizzes home</a></p>
-    {% endcomment %}
+{% endcomment %}
 
 {% endblock content %}

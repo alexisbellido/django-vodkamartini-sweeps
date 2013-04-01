@@ -4,13 +4,12 @@ from .models import Sweep, SweepEntry
 class SweepAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title", )}
     #list_filter = ['created', 'status']
-    #search_fields = ['title']
     #list_display = ('__unicode__', 'author', 'created', 'status')
 
 class SweepEntryAdmin(admin.ModelAdmin):
-    pass
-    #list_display = ('__unicode__', 'quiz')
-    #raw_id_fields = ('quiz',)
+    list_display = ('__unicode__', 'created')
+    search_fields = ['email']
+    raw_id_fields = ('sweep',)
 
     #fields = ('question', ('quiz', 'editquiz'), 'enabled', 'weight')
     #readonly_fields = ('editquiz',)

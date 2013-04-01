@@ -4,70 +4,48 @@ from .models import Sweep, SweepEntry
 
 class SweepEntryForm(forms.Form):
 
-    #def __init__(self, author, quiz_id=0, request=None, *args, **kwargs):
-    #    super(SweepEntryForm, self).__init__(*args, **kwargs)
-    #    self.quiz_id = quiz_id
-    #    self.request = request
+    first_name = forms.CharField(max_length=30, required=True)
+    last_name = forms.CharField(max_length=30, required=True)
+    email = forms.EmailField()
+    date_of_birth = forms.DateField(required=True)
+    zip_code = forms.CharField(max_length=10, required=True)
+    gender = forms.ChoiceField(choices=[(0, 'Choose your gender')] + SweepEntry.GENDER_CHOICES)
+    receive_email = forms.BooleanField(required=False)
 
-    title = forms.CharField()
-    #body = forms.CharField(widget=forms.Textarea, label='Enter a description for your quiz')
+    def __init__(self, *args, **kwargs):
+        """
+        Notice how we need to call __init__ from superclass first, if we don't do this
+        then we won't be able to access attributes such as fields and instance.
+        """
+        super(SweepEntryForm, self).__init__(*args, **kwargs)
+        if self.initial:
+            self.sweep = self.initial['sweep']
 
-    #def save(self):
-    #    quiz = {'title': self.cleaned_data['title'], 'body': self.cleaned_data['body']}
-    #    return quiz
+    def save(self):
+        # TODO one entry per day , sweepentry = SweepEntry.objects.get(pk=self.quiz_id)
+        # TODO date_of_birth using nicer widget
+        sweepentry = SweepEntry(
+                        sweep=self.sweep,
+                        first_name=self.cleaned_data['first_name'],
+                        last_name=self.cleaned_data['last_name'],
+                        email=self.cleaned_data['email'],
+                        date_of_birth=self.cleaned_data['date_of_birth'],
+                        zip_code=self.cleaned_data['zip_code'],
+                        gender=self.cleaned_data['gender'],
+                        receive_email=self.cleaned_data['receive_email'],
+                     )
 
-    #def save(self):
-    #    if self.quiz_id:
-    #        """ existing quiz, no need to change author or status """
-    #        quiz = Quiz.objects.get(pk=self.quiz_id)
-    #        quiz.title = self.cleaned_data['title']
-    #        quiz.body = self.cleaned_data['body']
-    #    else:
-    #        quiz = Quiz(title=self.cleaned_data['title'], body=self.cleaned_data['body'], author=self.author, status=Quiz.LIVE_STATUS)
+        sweepentry.save()
+        return sweepentry
 
-    #    quiz.save()
+    def clean_gender(self):
+        value = self.cleaned_data["gender"]
+        if value == '0':
+            raise forms.ValidationError("Please choose your gender")
+        return value
 
-    #    return quiz
-
-#class QuestionForm(forms.Form):
-#
-#    answer = forms.ModelChoiceField(queryset=Answer.objects.none(), widget=forms.RadioSelect, empty_label=None, label='What would be your answer?')
-#
-#    def __init__(self, *args, **kwargs):
-#        """
-#        Notice how we need to call __init__ from superclass first, if we don't do this
-#        then we won't be able to access attributes such as fields and instance.
-#        """
-#        super(QuestionForm, self).__init__(*args, **kwargs)
-#        if self.initial:
-#            self.question = self.initial['question']
-#            self.user = self.initial['user']
-#            self.next_question_id = self.initial['next_question_id']
-#            self.fields['answer'].queryset = self.question.answer_set.all().order_by('letter')
-#
-#    def save(self):
-#        try:
-#            userquizanswer = UserQuizAnswer.objects.get(user=self.user, quiz=self.question.quiz, answer__question=self.question)
-#            userquizanswer.answer = self.cleaned_data['answer']
-#        except UserQuizAnswer.DoesNotExist:
-#            userquizanswer = UserQuizAnswer(user=self.user, quiz=self.question.quiz, answer=self.cleaned_data['answer'])
-#        userquizanswer.save()
-#
-#        if self.next_question_id:
-#            success_url = reverse('vodkamartiniquiz_question_detail', kwargs={'slug': self.question.quiz.slug, 'pk': self.next_question_id})
-#        else:
-#            success_url = reverse('vodkamartiniquiz_quizresult_detail', kwargs={'slug': self.question.quiz.slug})
-#        return success_url
-#
-#    #def save(self):
-#    #    if self.question_id:
-#    #        """ existing question, no need to change author or status """
-#    #        question = Question.objects.get(pk=self.question_id)
-#    #        question.title = self.cleaned_data['title']
-#    #        question.body = self.cleaned_data['body']
-#    #    else:
-#    #        question = Question(title=self.cleaned_data['title'], body=self.cleaned_data['body'], author=self.author, status=Question.LIVE_STATUS)
-#
-#    #    question.save()
-#
-#    #    return question
+    #def clean(self):
+    #    cleaned_data = super(SweepEntryForm, self).clean()
+    #    print "receive email", cleaned_data["receive_email"]
+    #    raise forms.ValidationError("Did not send for 'help' in the subject despite CC'ing yourself.")
+    #    return cleaned_data

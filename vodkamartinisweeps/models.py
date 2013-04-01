@@ -43,10 +43,10 @@ class Sweep(models.Model):
 class SweepEntry(models.Model):
     MALE_GENDER = 1
     FEMALE_GENDER = 2
-    GENDER_CHOICES = (
+    GENDER_CHOICES = [
         (MALE_GENDER, 'Male'),
         (FEMALE_GENDER, 'Female'),
-    )
+    ]
 
     sweep = models.ForeignKey(Sweep)
     first_name = models.CharField(max_length=30, blank=True)

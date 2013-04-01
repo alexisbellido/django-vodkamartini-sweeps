@@ -55,6 +55,7 @@ class SweepEntry(models.Model):
     date_of_birth = models.DateField(blank=True)
     zip_code = models.CharField(max_length=10, blank=True)
     gender = models.IntegerField(choices=GENDER_CHOICES, default=FEMALE_GENDER)
+    receive_email = models.BooleanField(default=False)
     created = models.DateTimeField(default=timezone.now)
 
     class Meta:

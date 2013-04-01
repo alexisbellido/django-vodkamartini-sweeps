@@ -12,22 +12,22 @@ from .models import Sweep, SweepEntry
 from .forms import SweepEntryForm
 
 
-def sweeps_index(request, page=1):
-    """
-    Explain the purpose of this view.
-    """
-
-    # do something
-    return render(request, 
-                  'vodkamartinisweeps/sweeps_list.html',
-                  {
-                    'var': 'this is a variable',
-                  },
-                  )
-
-def sweeps_detail(request, slug):
-    output = "Test slug: %s" % (slug,)
-    return HttpResponse(output)
+#def sweeps_index(request, page=1):
+#    """
+#    Explain the purpose of this view.
+#    """
+#
+#    # do something
+#    return render(request, 
+#                  'vodkamartinisweeps/sweeps_list.html',
+#                  {
+#                    'var': 'this is a variable',
+#                  },
+#                  )
+#
+#def sweeps_detail(request, slug):
+#    output = "Test slug: %s" % (slug,)
+#    return HttpResponse(output)
 
 class SweepEntryDetail(FormView, SingleObjectMixin):
     """
@@ -79,3 +79,15 @@ class SweepEntryDetail(FormView, SingleObjectMixin):
 
 class SweepEntrySubmitted(DetailView):
     queryset = Sweep.live.all()
+    template_name = 'vodkamartinisweeps/sweepentry_submitted.html'
+
+    def get_context_data(self, **kwargs):
+        """
+        Populate the context.
+        Most of these details are initialized on self.get_initial
+        """
+        context = super(SweepEntrySubmitted, self).get_context_data(**kwargs)
+        print "sweepentry pk: ", self.kwargs['sweepentry_pk']
+        #context['sweep'] = self.sweep
+        #context['sweep_slug'] = self.sweep.slug
+        return context

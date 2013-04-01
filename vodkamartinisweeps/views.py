@@ -43,4 +43,7 @@ class SweepEntryDetail(FormView, SingleObjectMixin):
         return context
 
 class SweepEntrySubmitted(TemplateView):
+    """
+    The thank you page after submitting the form for the sweeps.
+    """
     template_name = 'vodkamartinisweeps/sweepentry_submitted.html'

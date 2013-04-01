@@ -1,5 +1,5 @@
 from django import forms
-#from django.core.urlresolvers import reverse
+from django.utils import timezone
 from .models import Sweep, SweepEntry
 
 class SweepEntryForm(forms.Form):
@@ -7,7 +7,7 @@ class SweepEntryForm(forms.Form):
     first_name = forms.CharField(max_length=30, required=True)
     last_name = forms.CharField(max_length=30, required=True)
     email = forms.EmailField()
-    date_of_birth = forms.DateField(required=True)
+    date_of_birth = forms.DateField(required=True, widget=forms.TextInput(attrs={'placeholder': 'mm/dd/yyyy'}))
     zip_code = forms.CharField(max_length=10, required=True)
     gender = forms.ChoiceField(choices=[(0, 'Choose your gender')] + SweepEntry.GENDER_CHOICES)
     receive_email = forms.BooleanField(required=False)
@@ -22,8 +22,6 @@ class SweepEntryForm(forms.Form):
             self.sweep = self.initial['sweep']
 
     def save(self):
-        # TODO one entry per day , sweepentry = SweepEntry.objects.get(pk=self.quiz_id)
-        # TODO date_of_birth using nicer widget
         sweepentry = SweepEntry(
                         sweep=self.sweep,
                         first_name=self.cleaned_data['first_name'],
@@ -44,8 +42,16 @@ class SweepEntryForm(forms.Form):
             raise forms.ValidationError("Please choose your gender")
         return value
 
-    #def clean(self):
-    #    cleaned_data = super(SweepEntryForm, self).clean()
-    #    print "receive email", cleaned_data["receive_email"]
-    #    raise forms.ValidationError("Did not send for 'help' in the subject despite CC'ing yourself.")
-    #    return cleaned_data
+    def clean(self):
+        today = timezone.now()
+        cleaned_data = super(SweepEntryForm, self).clean()
+        sweepentries = SweepEntry.objects.filter(
+                                                    email=cleaned_data['email'],
+                                                    created__day=today.day, 
+                                                    created__month=today.month, 
+                                                    created__year=today.year
+                                                )
+
+        if sweepentries.count():
+            raise forms.ValidationError("You have already participated today, please come back tomorrow for another choice to win.")
+        return cleaned_data

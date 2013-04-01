@@ -29,6 +29,7 @@ class Sweep(models.Model):
     source_id = models.CharField(max_length=50, blank=True)
     brand_id = models.CharField(max_length=50, blank=True)
     list_id = models.CharField(max_length=50, blank=True)
+    acquisition_partner_id = models.CharField(max_length=50, blank=True)
 
     class Meta:
         ordering = ["-created"]

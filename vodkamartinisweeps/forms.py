@@ -5,12 +5,12 @@ from .models import Sweep, SweepEntry
 
 class SweepEntryForm(forms.Form):
 
-    first_name = forms.CharField(max_length=30, required=True)
-    last_name = forms.CharField(max_length=30, required=True)
     email = forms.CharField(required=True)
     date_of_birth = forms.DateField(required=True, widget=forms.TextInput(attrs={'placeholder': 'mm/dd/yyyy'}))
-    zip_code = forms.CharField(max_length=10, required=True)
+    first_name = forms.CharField(max_length=30, required=True)
+    last_name = forms.CharField(max_length=30, required=True)
     gender = forms.ChoiceField(choices=[(0, 'Choose your gender')] + SweepEntry.GENDER_CHOICES)
+    zip_code = forms.CharField(max_length=10, required=True)
     receive_email = forms.BooleanField(required=False)
 
     def __init__(self, *args, **kwargs):

@@ -1,12 +1,13 @@
 from django import forms
 from django.utils import timezone
+from django.core.validators import validate_email
 from .models import Sweep, SweepEntry
 
 class SweepEntryForm(forms.Form):
 
     first_name = forms.CharField(max_length=30, required=True)
     last_name = forms.CharField(max_length=30, required=True)
-    email = forms.EmailField()
+    email = forms.CharField(required=True)
     date_of_birth = forms.DateField(required=True, widget=forms.TextInput(attrs={'placeholder': 'mm/dd/yyyy'}))
     zip_code = forms.CharField(max_length=10, required=True)
     gender = forms.ChoiceField(choices=[(0, 'Choose your gender')] + SweepEntry.GENDER_CHOICES)
@@ -45,13 +46,15 @@ class SweepEntryForm(forms.Form):
     def clean(self):
         today = timezone.now()
         cleaned_data = super(SweepEntryForm, self).clean()
-        sweepentries = SweepEntry.objects.filter(
-                                                    email=cleaned_data['email'],
-                                                    created__day=today.day, 
-                                                    created__month=today.month, 
-                                                    created__year=today.year
-                                                )
+        if 'email' in cleaned_data:
+            validate_email(cleaned_data['email'])
+            sweepentries = SweepEntry.objects.filter(
+                                                        email=cleaned_data['email'],
+                                                        created__day=today.day, 
+                                                        created__month=today.month, 
+                                                        created__year=today.year
+                                                    )
 
-        if sweepentries.count():
-            raise forms.ValidationError("You have already participated today, please come back tomorrow for another choice to win.")
+            if sweepentries.count():
+                raise forms.ValidationError("You have already participated today, please come back tomorrow for another choice to win.")
         return cleaned_data

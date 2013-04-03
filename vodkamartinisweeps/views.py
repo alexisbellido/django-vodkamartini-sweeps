@@ -23,7 +23,9 @@ class SweepEntryDetail(FormView, SingleObjectMixin):
 
     def get_initial(self):
         self.sweep = self.get_object()
-        return {'email': self.request.GET.get('email', ''), 
+        email = self.request.GET.get('email', '')
+        email = email.replace('%40', '@')
+        return {'email': email, 
                 'sweep': self.sweep,
                }
 

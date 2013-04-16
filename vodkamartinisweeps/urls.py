@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, include, url
+from django.conf.urls import patterns, include, url
 from .views import SweepEntryDetail, SweepEntrySubmitted
 
 urlpatterns = patterns('vodkamartinisweeps.views',

@@ -12,7 +12,7 @@ from .models import Sweep, SweepEntry
 from .forms import SweepEntryForm
 
 
-class SweepEntryDetail(FormView, SingleObjectMixin):
+class SweepEntryDetail(SingleObjectMixin, FormView):
     """
     Display the form to enter the sweeps by creating a SweepEntry instance.
     """
@@ -22,17 +22,17 @@ class SweepEntryDetail(FormView, SingleObjectMixin):
     queryset = Sweep.live.all()
 
     def get_initial(self):
-        self.sweep = self.get_object()
+        self.object = self.get_object()
         email = self.request.GET.get('email', '')
         email = email.replace('%40', '@')
         return {'email': email, 
-                'sweep': self.sweep,
+                'sweep': self.object,
                }
 
     def form_valid(self, form):
         #messages.info(self.request, 'Thank you for participating.')
         sweepentry = form.save()
-        self.success_url = reverse('vodkamartinisweeps_sweepentry_submitted', kwargs={'slug': self.sweep.slug})
+        self.success_url = reverse('vodkamartinisweeps_sweepentry_submitted', kwargs={'slug': self.object.slug})
         return super(SweepEntryDetail, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -41,7 +41,7 @@ class SweepEntryDetail(FormView, SingleObjectMixin):
         Most of these details are initialized on self.get_initial
         """
         context = super(SweepEntryDetail, self).get_context_data(**kwargs)
-        context['sweep'] = self.sweep
+        context['sweep'] = self.object
         return context
 
 class SweepEntrySubmitted(TemplateView):

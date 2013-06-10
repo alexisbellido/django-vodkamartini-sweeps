@@ -43,8 +43,9 @@ class SweepEntryDetail(SingleObjectMixin, FormView):
         """
         context = super(SweepEntryDetail, self).get_context_data(**kwargs)
         context['sweep'] = self.object
-        now = timezone.now()
-        context['is_sweep_closed'] = self.object.closed < now
+        if self.object.closed:
+            now = timezone.now()
+            context['is_sweep_closed'] = self.object.closed < now
         return context
 
 class SweepEntrySubmitted(TemplateView):

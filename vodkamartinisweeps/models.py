@@ -23,6 +23,8 @@ class Sweep(models.Model):
 
     title = models.CharField(max_length=200)
     created = models.DateTimeField(default=timezone.now)
+    closed = models.DateTimeField(null=True, blank=True)
+    closed_message = models.TextField(blank=True)
     slug = models.SlugField(unique=True, max_length=128)
     status = models.IntegerField(choices=STATUS_CHOICES, default=DRAFT_STATUS)
     source_type = models.CharField(max_length=50, blank=True)

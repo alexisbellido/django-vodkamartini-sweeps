@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render, render_to_response, get_object_or_404
+from django.utils import timezone
 
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -42,6 +43,8 @@ class SweepEntryDetail(SingleObjectMixin, FormView):
         """
         context = super(SweepEntryDetail, self).get_context_data(**kwargs)
         context['sweep'] = self.object
+        now = timezone.now()
+        context['is_sweep_closed'] = self.object.closed < now
         return context
 
 class SweepEntrySubmitted(TemplateView):
